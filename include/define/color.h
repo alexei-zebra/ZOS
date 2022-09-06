@@ -1,0 +1,18 @@
+enum e_color {
+    black,
+    blue,
+    green,
+    turquoise,
+    red,
+    purple,
+    brown,
+    light_gray,
+    gray,
+    light_blue,
+    light_green,
+    light_turquoise,
+    pink,
+    light_purple,
+    yellow,
+    white,
+};
