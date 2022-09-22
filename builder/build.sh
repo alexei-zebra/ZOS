@@ -2,13 +2,13 @@
 
 # start
 printf "\33[1m
-   ,-----------------,
-   |       ZOS       |
-   |-----------------|
-   | made in russian |
-   |-----------------|
-   |    by  zёbra    |
-   '-----------------'
+   ,----------------,
+   |      ZOS       |
+   |----------------|
+   | made in russia |
+   |----------------|
+   |    by zёbra    |
+   '----------------'
 \33[0m
 "
 
@@ -27,6 +27,7 @@ printf "\33[1;32m[  DONE  ]\33[0m pre compilation done\n\n"
 
 printf "\33[1;36m[  INFO  ]\33[0m c compilation\n"
 # C compilation
+# ../builder/script/ccs.sh main kernel
 ../builder/script/cc.sh main kernel
 printf "\33[1;32m[  DONE  ]\33[0m c compilation done\n\n"
 

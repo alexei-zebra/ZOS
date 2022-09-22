@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "int.h": "c",
-        "color.h": "c"
+        "color.h": "c",
+        "main.C": "cpp"
     }
 }

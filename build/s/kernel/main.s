@@ -1,2 +1,2 @@
 o: file 'o/main.o'
-times(1*512-($-o)) db 0
+times(2*2*512-($-o)) db 0
