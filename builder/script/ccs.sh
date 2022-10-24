@@ -1,7 +1,7 @@
 #!/bin/bash
 
 printf "\33[37;1m[ * * *  ]\33[0m C compiling \33[1m$1.\33[0m\n"
-gcc -std=gnu99 -fpermissive -Os -I ../include -nostdlib -m32 -march=i386 -fno-pie -ffreestanding -S o/$3/$1.o \
+gcc-10 -x c++ -std=gnu99 -fpermissive -Os -I ../include -nostdlib -m32 -march=i386 -fno-pie -ffreestanding -S o/$3/$1.o \
 -Wl,--nmagic,--script=../builder/c/linker.ld ../src/$2/$1.c 2> log/ce.log 1> log/c.log
 if (grep "rror" log/ce.log)
 then

@@ -1,4 +1,4 @@
-build/bin
-build/o
-build/log
-os.img
+*.bin
+*.o
+*.log
+*.img

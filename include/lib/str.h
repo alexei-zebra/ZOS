@@ -36,6 +36,7 @@ u_char8 str_get_len(u_char8 *str)
     for(u_char8 i = 0; i < 255; i++){
         if(str[i] == 0) return i;
     }
+    return 0;
 };
 
 s_f_string8 str_calc_len(s_f_string8 str)
