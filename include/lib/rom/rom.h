@@ -13,7 +13,7 @@ public:
     ~Rom();
 
     u_char8 get_boot_disk_id();
-    void load_data_use_daps(s_daps);
+    void load_data_use_daps(s_daps *);
     s_address get_daps_address(s_daps *);
 };
 
@@ -44,8 +44,8 @@ s_address Rom::get_daps_address(s_daps *dups){
     return ret;
 }
 
-void Rom::load_data_use_daps(s_daps daps){
-    s_address addr = get_daps_address(&daps);
+void Rom::load_data_use_daps(s_daps *daps){
+    s_address addr = get_daps_address(daps);
     asm volatile(
         "mov $0x43, %%ah\n"
         "push %%cx\n"

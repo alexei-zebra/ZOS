@@ -73,8 +73,8 @@ void main()
     test.p_offset = 0x7E00;
     test.p_segment = 0;
     test.p_start_sector = 9;
-    u_longlong128 test_dups = 0x100008007E000000;
-    rom.load_data_use_daps(test);
+    u_long64 test_dups[2] = {0x0000000000000009, 0x00007E0000080010};
+    rom.load_data_use_daps(&test);
 
     void *test_call = (void *)0x7E00;
 
