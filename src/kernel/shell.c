@@ -15,10 +15,10 @@ asm(".code16gcc\n\t"
 
 u_char8 print_char(u_char8 symbol, u_char8 color, u_char8 x, u_char8 y, u_short16 width){
     asm volatile(
-        "mov %%cl, %%ah\n"
-        "push $0xb800\n"
-        "pop %%es\n"
-        "stosw\n"
+        "mov %%cl, %%ah\n\t"
+        "push $0xa000\n\t"
+        "pop %%es\n\t"
+        "stosw\n\t"
         : "=a"(symbol)
         : "a"(symbol),"c"(color),"D"((y * width + x) * 1)
         :

@@ -15,6 +15,7 @@ public:
     u_char8 get_boot_disk_id();
     void load_data_use_daps(s_daps *);
     s_address get_daps_address(s_daps *);
+    u_int32 get_address_daps(s_address);
 };
 
 Rom::Rom()
@@ -43,11 +44,21 @@ s_address Rom::get_daps_address(s_daps *dups){
     ret.p_address_low = (address % 16);
     return ret;
 }
+u_int32 Rom::get_address_daps(s_address adr){
+    u_int32 ret;
+    // u_int32 address = (u_int32)((u_char8 *)dups);
+    // ret.p_address_high = (address >> 4);
+    // ret.p_address_low = (address % 16);
+    ret += adr.p_address_high << 4;
+    ret += adr.p_address_low;
+    return ret;
+}
 
 void Rom::load_data_use_daps(s_daps *daps){
     s_address addr = get_daps_address(daps);
+    asm volatile("pusha");
     asm volatile(
-        "mov $0x43, %%ah\n"
+        "mov $0x42, %%ah\n"
         "push %%cx\n"
         "pop %%ds\n"
         "int $0x13\n"
@@ -55,4 +66,5 @@ void Rom::load_data_use_daps(s_daps *daps){
         : "d"(boot_disk_id),"c"(addr.p_address_high),"S"(addr.p_address_low)
         :
     );
+    asm volatile("popa");
 }

@@ -69,25 +69,59 @@ void main()
         print_char(disk.data[i], c_white, i + 8, 2, info.width);
     };
     s_daps test;
+    test.p_size = 16;
     test.p_number_sectors = 8;
-    test.p_offset = 0x7E00;
+    test.p_offset = 0x1500;
     test.p_segment = 0;
     test.p_start_sector = 9;
-    u_long64 test_dups[2] = {0x0000000000000009, 0x00007E0000080010};
-    rom.load_data_use_daps(&test);
 
-    void *test_call = (void *)0x7E00;
 
-    asm(".code16gcc\n\t"
-        "push $0x0000\n\t"
-        // "call %%ax\n\t"
-        "jmp %%ax\n\t"
+    u_short16 err;
+    // u_int32 address = (u_int32)((u_char8 *)&test);
+    // s_address addr = rom.get_daps_address(&test);
+    // u_int32 addr2 = rom.get_address_daps(addr);
+    asm volatile(
+        "mov $0x42, %%ah\n"
+        // "push %%ds\n"
+        "push %%cs\n"
+        "pop %%ds\n"
+        "int $0x13\n"
+        // "pop %%ds\n"
+        ""
+        : "=a"(err)
+        : "d"(rom.get_boot_disk_id()),"S"(&test)//,"c"(addr.p_address_high)
         :
-        :"a"(0x7E00)
+    );
+    print_char((err >> 8)+0x30, c_white, 8, 8, info.width);
+
+    // if (address == addr2)
+        // print_char(addr2 / 16 / 16, c_white, 8, 11, info.width);
+        // print_char(address - 0x80, c_white, 8, 12, info.width);
+
+
+    // rom.load_data_use_daps(&test);
+
+
+    // u_char8 *test_call = (u_char8 *)0x7E00;
+
+    asm(
+        "push $0x0000\n\t"
+        "pop %%ds\n\t"
+        "call %%ax\n\t"
+        // "jmp %%ax\n\t"
+        :
+        :"a"(test.p_offset)
         :
         );
 
 
+    {
+        for (u_char8 i; i < 16; i++){
+        print_char(((u_char8 *)&test)[i]+0x30, c_white, 16 - i + 8, 10, info.width);
+        };
+        print_char(test.p_start_sector+0x30, c_white, 8, 11, info.width);
+
+    }
     // test.p_number_sectors = 0x3132;
     // test.p_sector = 0x3132333435363738;
     // u_int32 address = (u_int32)((u_char8 *)&test);
