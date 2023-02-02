@@ -2,6 +2,7 @@
 #include "define/integer.h"
 #endif
 
+// struct format string len8
 struct s_f_string8
 {
     u_char8 len;

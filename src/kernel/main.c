@@ -5,16 +5,16 @@
 #include "lib/graphics/graphics.h"
 #include "lib/str.h"
 
-asm(".code16gcc\n"
-    "call main\n");
+asm(".code16gcc\n\t"
+    "call main\n\t");
 
 u_char8 print_char(u_char8 symbol, u_char8 color, u_char8 x, u_char8 y, u_short16 width)
 {
     asm volatile(
-        "mov %%cl, %%ah\n"
-        "push $0xb800\n"
-        "pop %%es\n"
-        "stosw\n"
+        "mov %%cl, %%ah\n\t"
+        "push $0xb800\n\t"
+        "pop %%es\n\t"
+        "stosw\n\t"
         : "=a"(symbol)
         : "a"(symbol), "c"(color),"D"((y * width + x) * 2)
         :
@@ -77,16 +77,11 @@ void main()
 
 
     u_short16 err;
-    // u_int32 address = (u_int32)((u_char8 *)&test);
-    // s_address addr = rom.get_daps_address(&test);
-    // u_int32 addr2 = rom.get_address_daps(addr);
     asm volatile(
-        "mov $0x42, %%ah\n"
-        // "push %%ds\n"
-        "push %%cs\n"
-        "pop %%ds\n"
-        "int $0x13\n"
-        // "pop %%ds\n"
+        "mov $0x42, %%ah\n\t"
+        "push %%cs\n\t"
+        "pop %%ds\n\t"
+        "int $0x13\n\t"
         ""
         : "=a"(err)
         : "d"(rom.get_boot_disk_id()),"S"(&test)//,"c"(addr.p_address_high)
@@ -94,12 +89,28 @@ void main()
     );
     print_char((err >> 8)+0x30, c_white, 8, 8, info.width);
 
-    // if (address == addr2)
-        // print_char(addr2 / 16 / 16, c_white, 8, 11, info.width);
-        // print_char(address - 0x80, c_white, 8, 12, info.width);
 
+    rom.load_data_use_daps(&test);
+    s_address t2 = rom.get_daps_address(&test);
 
-    // rom.load_data_use_daps(&test);
+    {
+        print_char(0x31, c_white, 10, 10, info.width);
+        print_char('|', c_white, 15, 10, info.width);
+        print_char(t2.p_address_low >> 12, c_white, 16, 10, info.width);
+        print_char(t2.p_address_low >> 8 and 0x000f, c_white, 17, 10, info.width);
+        print_char(t2.p_address_low >> 4 and 0x000f, c_white, 18, 10, info.width);
+        print_char(t2.p_address_low and 0x000f, c_white, 19, 10, info.width);
+        print_char(0x32, c_white, 10, 11, info.width);
+        print_char('|', c_white, 15, 11, info.width);
+        print_char(t2.p_address_high % 16 % 16 % 16 and 0x000f, c_white, 16, 11, info.width);
+        print_char(t2.p_address_high % 16 % 16 and 0x000f, c_white, 17, 11, info.width);
+        print_char(t2.p_address_high % 16 and 0x000f, c_white, 18, 11, info.width);
+        print_char(t2.p_address_high and 0x000f, c_white, 19, 11, info.width);
+        
+        // for (u_char8 i; i < 16; i++){
+        //     print_char(((t2.p_address_high >> i) and 1) + 0x30, c_white, 16 - i + 8, 13, info.width);
+        // };
+    }
 
 
     // u_char8 *test_call = (u_char8 *)0x7E00;
@@ -107,35 +118,18 @@ void main()
     asm(
         "push $0x0000\n\t"
         "pop %%ds\n\t"
-        "call %%ax\n\t"
-        // "jmp %%ax\n\t"
+        // "call %%ax\n\t"
         :
         :"a"(test.p_offset)
         :
         );
 
 
-    {
-        for (u_char8 i; i < 16; i++){
-        print_char(((u_char8 *)&test)[i]+0x30, c_white, 16 - i + 8, 10, info.width);
-        };
-        print_char(test.p_start_sector+0x30, c_white, 8, 11, info.width);
+    // {
+    //     for (u_char8 i; i < 16; i++){
+    //     print_char(((u_char8 *)&test)[i]+0x30, c_white, 16 - i + 8, 10, info.width);
+    //     };
+    //     print_char(test.p_start_sector+0x30, c_white, 8, 11, info.width);
 
-    }
-    // test.p_number_sectors = 0x3132;
-    // test.p_sector = 0x3132333435363738;
-    // u_int32 address = (u_int32)((u_char8 *)&test);
-    // s_f_string8 dph = str_conv_dec(rom.get_daps_address(&test).p_address_high);
-    // s_f_string8 dpl = str_conv_dec(rom.get_daps_address(&test).p_address_low);
-    // s_f_string8 sa = str_conv_dec(test.p_number_sectors);
-    // print_char(rom.get_boot_disk_id(), c_green, 2, 4, info.width);
-    // for (u_char8 i; i < 10; i++){
-    //     print_char(dph.data[i], c_white, i + 8, 8, info.width);
-    // };
-    // for (u_char8 i; i < 10; i++){
-    //     print_char(dpl.data[i], c_white, i + 8, 9, info.width);
-    // };
-    // for (u_char8 i; i < 10; i++){
-    //     print_char(sa.data[i], c_white, i + 8, 10, info.width);
-    // };
+    // }
 }

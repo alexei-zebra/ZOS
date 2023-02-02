@@ -27,7 +27,7 @@ u_char8 print_char(u_char8 symbol, u_char8 color, u_char8 x, u_char8 y, u_short1
 }
 
 void main(){
-    set_video_mode(0x11);
+    set_video_mode(0x3);
     s_video_mode_info info = get_video_mode_info();
     print_char(info.mode+0x30, c_green, 0, 4, info.width);
     for (u_char8 i; i < 10; i++){

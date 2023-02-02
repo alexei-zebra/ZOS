@@ -56,15 +56,15 @@ u_int32 Rom::get_address_daps(s_address adr){
 
 void Rom::load_data_use_daps(s_daps *daps){
     s_address addr = get_daps_address(daps);
-    asm volatile("pusha");
+    // asm volatile("push %%ds");
     asm volatile(
         "mov $0x42, %%ah\n"
-        "push %%cx\n"
+        "push %%cs\n"
         "pop %%ds\n"
         "int $0x13\n"
         :
         : "d"(boot_disk_id),"c"(addr.p_address_high),"S"(addr.p_address_low)
         :
     );
-    asm volatile("popa");
+    // asm volatile("pop %%ds");
 }

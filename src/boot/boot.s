@@ -6,7 +6,7 @@ cli             ;запрещаем прерывания
         mov ds,ax       ;настраиваем сегмент данных на нулевой адрес
         mov es,ax       ;настраиваем сегмент es на нулевой адрес
         mov ss,ax       ;настраиваем сегмент стека на нулевой адрес
-        mov sp,07BFFh   ;сегмент sp указывает на текущую вершину стека
+        mov sp,07a00h   ;сегмент sp указывает на текущую вершину стека
 sti         ;разрешаем прерывания
 
         ; mov ah, 1h
@@ -24,13 +24,13 @@ pop ds
 mov si,paket
 mov ah,42h
 int 13h
-jmp 0000:0500h
+jmp 0000:8000h
 
 jmp $
 paket:
 dw 16;const paksize
 dw 8;num sectors
-dw 0500h;offset
+dw 8000h;offset
 dw 0;segment
 dq 1;start sector
 
